@@ -1,29 +1,36 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="container">
-  <div class="row">
-    <div class="col">
-      <label class="font-weight-bold">
-        ALttP Sprite Injector
-      </label>
+    <div class="card border-secondary w-75">
+        <div class="card-body">
+            <div class="card-title">
+                <label class="font-weight-bold">
+                    ALttP Sprite Injector
+                </label>
+            </div>
+            <div class="card-text">
+                <div>
+                    <label class="btn btn-primary btn-file">
+                        Select Rom
+                        <input type="file" style="display: none;" (change)="onRomChange($event)" />
+                    </label>
+                    <label>{{romFilename}}</label>
+                    <label class="text-danger">{{romError}}</label>
+                </div>
+                <div>
+                    <label class="btn btn-primary btn-file">
+                        Select Sprite
+                        <input type="file" style="display: none;" (change)="onSpriteChange($event)" />
+                    </label>
+                    <label>{{spriteFilename}}</label>
+                    <label class="text-danger">{{spriteError}}</label>
+                    <canvas #spriteCanvas width="96" height="48" style="background-color: gray"></canvas>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="onSaveRom()">Save Updated Rom</button>
+            </div>
+        </div>
+        <div class="card-footer">
+            Please note that this site should not be used to inject sprites into race or tournament roms. Doing so may result in disqualification
+            from races.
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <div>
-        <label class="btn btn-primary btn-file">
-          Select Rom<input type="file" style="display: none;" (change)="onRomChange($event)"/>
-        </label>
-        <label>{{romFilename}}</label>
-        <label class="text-danger">{{romError}}</label>
-      </div>
-      <div>
-        <label class="btn btn-primary btn-file">
-          Select Sprite<input type="file" style="display: none;" (change)="onSpriteChange($event)"/>
-        </label>
-        <label>{{spriteFilename}}</label>
-        <label class="text-danger">{{spriteError}}</label>
-      </div>
-      <button type="button" class="btn btn-primary" (click)="onSaveRom()">Save Updated Rom</button><br>
-    </div>
-  </div>
 </div>

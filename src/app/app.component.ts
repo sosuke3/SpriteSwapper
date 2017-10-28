@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ViewChild } from '@angular/core';
+
+import { Sprite } from './sprite';
 
 interface HTMLInputEvent extends Event
 {
@@ -16,9 +19,14 @@ export class AppComponent
     romFilename = '';
     spriteBytes: Uint8Array = null;
     spriteFilename = '';
+    sprite: Sprite = null;
     romError = '';
     spriteError = '';
 
+    context: CanvasRenderingContext2D;
+    
+    @ViewChild('spriteCanvas') spriteCanvas;
+    
     onRomChange (event?: HTMLInputEvent)
     {
         console.log('onRomChange');
@@ -68,6 +76,68 @@ export class AppComponent
         {
             let arrayBuffer = reader.result;
             let array = new Uint8Array(arrayBuffer);
+
+            try
+            {
+                this.sprite = new Sprite(array);
+            }
+            catch (e)
+            {
+                this.spriteError = e.message;
+                return;
+            }
+
+            let canvas = this.spriteCanvas.nativeElement;
+            this.context = canvas.getContext('2d');
+            
+            let imgData = this.context.getImageData(0, 0, 16 * 3, 24);
+
+            for (let x = 0; x < 16; x++)
+            {
+                for (let y = 0; y < 24; y++)
+                {
+                    let pixel = this.sprite.previewBytes[x + y * (16 * 3)];
+                    imgData.data[x * 4 + y * imgData.width * 4] = pixel.R;
+                    imgData.data[x * 4 + y * imgData.width * 4 + 1] = pixel.G;
+                    imgData.data[x * 4 + y * imgData.width * 4 + 2] = pixel.B;
+                    imgData.data[x * 4 + y * imgData.width * 4 + 3] = pixel.A;
+                }
+            }
+
+            for (let x = 0; x < 16; x++)
+            {
+                for (let y = 0; y < 24; y++)
+                {
+                    let pixel = this.sprite.previewBytes[(x + 16) + y * (16 * 3)];
+                    imgData.data[(x + 16) * 4 + y * imgData.width * 4] = pixel.R;
+                    imgData.data[(x + 16) * 4 + y * imgData.width * 4 + 1] = pixel.G;
+                    imgData.data[(x + 16) * 4 + y * imgData.width * 4 + 2] = pixel.B;
+                    imgData.data[(x + 16) * 4 + y * imgData.width * 4 + 3] = pixel.A;
+                }
+            }
+
+            for (let x = 0; x < 16; x++)
+            {
+                for (let y = 0; y < 24; y++)
+                {
+                    let pixel = this.sprite.previewBytes[(x + 32) + y * (16 * 3)];
+                    imgData.data[(x + 32) * 4 + y * imgData.width * 4] = pixel.R;
+                    imgData.data[(x + 32) * 4 + y * imgData.width * 4 + 1] = pixel.G;
+                    imgData.data[(x + 32) * 4 + y * imgData.width * 4 + 2] = pixel.B;
+                    imgData.data[(x + 32) * 4 + y * imgData.width * 4 + 3] = pixel.A;
+                }
+            }
+
+            // for (let i = 0; i < imgData.data.length / 4; i++)
+            // {
+            //     let pixel = this.sprite.previewBytes[i];
+            //     imgData.data[i * 4] = pixel.R;
+            //     imgData.data[i * 4 + 1] = pixel.G;
+            //     imgData.data[i * 4 + 2] = pixel.B;
+            //     imgData.data[i * 4 + 3] = pixel.A;
+            // }
+            this.context.putImageData(imgData, 0, 0);
+        
             this.spriteBytes = array;
             //let binaryString = String.fromCharCode.apply(null, array);
             //console.log(binaryString);
@@ -130,14 +200,21 @@ export class AppComponent
             return;
         }
 
+        // sprite graphics
         for (let i = 0; i < 0x7000; i++)
         {
             this.romBytes[0x80000 + i] = this.spriteBytes[i];
         }
+        // palette
         for (let i = 0; i < 0x78; i++)
         {
             this.romBytes[0x0DD308 + i] = this.spriteBytes[0x7000 + i];
         }
+        // gloves color
+        this.romBytes[0xDEDF5] = this.spriteBytes[0x7036];
+        this.romBytes[0xDEDF6] = this.spriteBytes[0x7037];
+        this.romBytes[0xDEDF7] = this.spriteBytes[0x7054];
+        this.romBytes[0xDEDF8] = this.spriteBytes[0x7055];
 
         this.downloadBlob(this.romBytes, this.romFilename, 'application/octet-stream');
     }
