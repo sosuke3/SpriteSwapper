@@ -35,6 +35,36 @@ export class Sprite
         this.fillPreviewBytes();
     }
 
+    drawSpritePreview(canvas)
+    {
+        let context: CanvasRenderingContext2D = canvas.getContext('2d');
+        
+        let newCanvas = document.createElement('canvas');
+        newCanvas.width = 16 * 3;
+        newCanvas.height = 24;
+
+        let imgData = newCanvas.getContext('2d').getImageData(0, 0, 16 * 3, 24);
+
+        for (let x = 0; x < 16 * 3; x++)
+        {
+            for (let y = 0; y < 24; y++)
+            {
+                let pixel = this.previewBytes[x + y * (16 * 3)];
+                imgData.data[x * 4 + y * imgData.width * 4] = pixel.R;
+                imgData.data[x * 4 + y * imgData.width * 4 + 1] = pixel.G;
+                imgData.data[x * 4 + y * imgData.width * 4 + 2] = pixel.B;
+                imgData.data[x * 4 + y * imgData.width * 4 + 3] = pixel.A;
+            }
+        }
+
+        newCanvas.getContext('2d').putImageData(imgData, 0, 0);
+
+        context.save();
+        context.scale(2, 2);
+        context.drawImage(newCanvas, 0, 0);
+        context.restore();
+    }
+
     fillPreviewBytes()
     {
         this.previewBytes = new Array(16 * 3 * 24);

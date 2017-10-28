@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewChild } from '@angular/core';
+import { $ } from 'jquery';
 
 import { Sprite } from './sprite';
 
@@ -23,8 +24,6 @@ export class AppComponent
     romError = '';
     spriteError = '';
 
-    context: CanvasRenderingContext2D;
-    
     @ViewChild('spriteCanvas') spriteCanvas;
     
     onRomChange (event?: HTMLInputEvent)
@@ -88,55 +87,7 @@ export class AppComponent
             }
 
             let canvas = this.spriteCanvas.nativeElement;
-            this.context = canvas.getContext('2d');
-            
-            let imgData = this.context.getImageData(0, 0, 16 * 3, 24);
-
-            for (let x = 0; x < 16; x++)
-            {
-                for (let y = 0; y < 24; y++)
-                {
-                    let pixel = this.sprite.previewBytes[x + y * (16 * 3)];
-                    imgData.data[x * 4 + y * imgData.width * 4] = pixel.R;
-                    imgData.data[x * 4 + y * imgData.width * 4 + 1] = pixel.G;
-                    imgData.data[x * 4 + y * imgData.width * 4 + 2] = pixel.B;
-                    imgData.data[x * 4 + y * imgData.width * 4 + 3] = pixel.A;
-                }
-            }
-
-            for (let x = 0; x < 16; x++)
-            {
-                for (let y = 0; y < 24; y++)
-                {
-                    let pixel = this.sprite.previewBytes[(x + 16) + y * (16 * 3)];
-                    imgData.data[(x + 16) * 4 + y * imgData.width * 4] = pixel.R;
-                    imgData.data[(x + 16) * 4 + y * imgData.width * 4 + 1] = pixel.G;
-                    imgData.data[(x + 16) * 4 + y * imgData.width * 4 + 2] = pixel.B;
-                    imgData.data[(x + 16) * 4 + y * imgData.width * 4 + 3] = pixel.A;
-                }
-            }
-
-            for (let x = 0; x < 16; x++)
-            {
-                for (let y = 0; y < 24; y++)
-                {
-                    let pixel = this.sprite.previewBytes[(x + 32) + y * (16 * 3)];
-                    imgData.data[(x + 32) * 4 + y * imgData.width * 4] = pixel.R;
-                    imgData.data[(x + 32) * 4 + y * imgData.width * 4 + 1] = pixel.G;
-                    imgData.data[(x + 32) * 4 + y * imgData.width * 4 + 2] = pixel.B;
-                    imgData.data[(x + 32) * 4 + y * imgData.width * 4 + 3] = pixel.A;
-                }
-            }
-
-            // for (let i = 0; i < imgData.data.length / 4; i++)
-            // {
-            //     let pixel = this.sprite.previewBytes[i];
-            //     imgData.data[i * 4] = pixel.R;
-            //     imgData.data[i * 4 + 1] = pixel.G;
-            //     imgData.data[i * 4 + 2] = pixel.B;
-            //     imgData.data[i * 4 + 3] = pixel.A;
-            // }
-            this.context.putImageData(imgData, 0, 0);
+            this.sprite.drawSpritePreview(canvas);
         
             this.spriteBytes = array;
             //let binaryString = String.fromCharCode.apply(null, array);
