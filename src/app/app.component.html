@@ -22,8 +22,8 @@
                         <input type="file" style="display: none;" (change)="onSpriteChange($event)" />
                     </label>
                     <label>{{spriteFilename}}</label>
-                    <label class="text-danger">{{spriteError}}</label>
-                    <canvas #spriteCanvas width="96" height="48" style="background-color: gray"></canvas>
+                    <label class="text-danger">{{spriteError}}</label><br>
+                    <canvas #spriteCanvas width="96" height="48"></canvas>
                 </div>
                 <button type="button" class="btn btn-primary" (click)="onSaveRom()">Save Updated Rom</button>
             </div>

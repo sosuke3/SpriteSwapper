@@ -39,30 +39,37 @@ export class Sprite
     {
         let context: CanvasRenderingContext2D = canvas.getContext('2d');
         
-        let newCanvas = document.createElement('canvas');
-        newCanvas.width = 16 * 3;
-        newCanvas.height = 24;
-
-        let imgData = newCanvas.getContext('2d').getImageData(0, 0, 16 * 3, 24);
+        let imgData = context.getImageData(0, 0, 16 * 3 * 2, 24 * 2);
 
         for (let x = 0; x < 16 * 3; x++)
         {
             for (let y = 0; y < 24; y++)
             {
                 let pixel = this.previewBytes[x + y * (16 * 3)];
-                imgData.data[x * 4 + y * imgData.width * 4] = pixel.R;
-                imgData.data[x * 4 + y * imgData.width * 4 + 1] = pixel.G;
-                imgData.data[x * 4 + y * imgData.width * 4 + 2] = pixel.B;
-                imgData.data[x * 4 + y * imgData.width * 4 + 3] = pixel.A;
+
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 0) * imgData.width * 4] = pixel.R;
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 0) * imgData.width * 4 + 1] = pixel.G;
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 0) * imgData.width * 4 + 2] = pixel.B;
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 0) * imgData.width * 4 + 3] = pixel.A;
+
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 0) * imgData.width * 4] = pixel.R;
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 0) * imgData.width * 4 + 1] = pixel.G;
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 0) * imgData.width * 4 + 2] = pixel.B;
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 0) * imgData.width * 4 + 3] = pixel.A;
+
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 1) * imgData.width * 4] = pixel.R;
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 1) * imgData.width * 4 + 1] = pixel.G;
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 1) * imgData.width * 4 + 2] = pixel.B;
+                imgData.data[(x * 2 + 0) * 4 + (y * 2 + 1) * imgData.width * 4 + 3] = pixel.A;
+
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 1) * imgData.width * 4] = pixel.R;
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 1) * imgData.width * 4 + 1] = pixel.G;
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 1) * imgData.width * 4 + 2] = pixel.B;
+                imgData.data[(x * 2 + 1) * 4 + (y * 2 + 1) * imgData.width * 4 + 3] = pixel.A;
             }
         }
 
-        newCanvas.getContext('2d').putImageData(imgData, 0, 0);
-
-        context.save();
-        context.scale(2, 2);
-        context.drawImage(newCanvas, 0, 0);
-        context.restore();
+        context.putImageData(imgData, 0, 0);
     }
 
     fillPreviewBytes()
