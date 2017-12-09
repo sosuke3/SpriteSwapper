@@ -23,6 +23,8 @@
         "styles.css"
       ],
       "scripts": [
+          "../node_modules/text-encoding/lib/encoding-indexes.js",
+          "../node_modules/text-encoding/lib/encoding.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

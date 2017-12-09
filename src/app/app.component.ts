@@ -119,9 +119,13 @@ export class AppComponent
 
     isValidSprite (sprite: Uint8Array): boolean
     {
-        if (sprite.length !== 0x7078)
+        if (sprite.length === 0x7078)
         {
-            return false;
+            return true;
+        }
+        else
+        {
+
         }
 
         return true;
@@ -133,7 +137,7 @@ export class AppComponent
         this.spriteError = '';
         this.romError = '';
 
-        if (!this.isValidSprite(this.spriteBytes))
+        if (!this.sprite.isValidSprite())
         {
             console.log('Invalid sprite file.');
             this.spriteError = 'Invalid sprite file.';
@@ -154,18 +158,18 @@ export class AppComponent
         // sprite graphics
         for (let i = 0; i < 0x7000; i++)
         {
-            this.romBytes[0x80000 + i] = this.spriteBytes[i];
+            this.romBytes[0x80000 + i] = this.sprite.PixelData[i];
         }
         // palette
         for (let i = 0; i < 0x78; i++)
         {
-            this.romBytes[0x0DD308 + i] = this.spriteBytes[0x7000 + i];
+            this.romBytes[0x0DD308 + i] = this.sprite.PaletteData[i];
         }
         // gloves color
-        this.romBytes[0xDEDF5] = this.spriteBytes[0x7036];
-        this.romBytes[0xDEDF6] = this.spriteBytes[0x7037];
-        this.romBytes[0xDEDF7] = this.spriteBytes[0x7054];
-        this.romBytes[0xDEDF8] = this.spriteBytes[0x7055];
+        this.romBytes[0xDEDF5] = this.sprite.GlovePalette[0];
+        this.romBytes[0xDEDF6] = this.sprite.GlovePalette[1];
+        this.romBytes[0xDEDF7] = this.sprite.GlovePalette[2];
+        this.romBytes[0xDEDF8] = this.sprite.GlovePalette[3];
 
         this.downloadBlob(this.romBytes, this.romFilename, 'application/octet-stream');
     }
