@@ -171,7 +171,8 @@ export class AppComponent
         this.romBytes[0xDEDF7] = this.sprite.GlovePalette[2];
         this.romBytes[0xDEDF8] = this.sprite.GlovePalette[3];
 
-        this.downloadBlob(this.romBytes, this.romFilename, 'application/octet-stream');
+        let outputFilename = this.spriteFilename.substring(0, this.spriteFilename.lastIndexOf('.')) + ' - ' + this.romFilename;
+        this.downloadBlob(this.romBytes, outputFilename, 'application/octet-stream');
     }
 
     downloadBlob = (data, fileName, mimeType) =>

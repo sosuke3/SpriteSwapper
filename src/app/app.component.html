@@ -11,7 +11,7 @@
                 <div>
                     <label class="btn btn-primary btn-file">
                         Select Rom
-                        <input type="file" style="display: none;" (change)="onRomChange($event)" />
+                        <input type="file" accept=".sfc" style="display: none;" (change)="onRomChange($event)" />
                     </label>
                     <label>{{romFilename}}</label>
                     <label class="text-danger">{{romError}}</label>
@@ -19,7 +19,7 @@
                 <div>
                     <label class="btn btn-primary btn-file">
                         Select Sprite
-                        <input type="file" style="display: none;" (change)="onSpriteChange($event)" />
+                        <input type="file" accept=".zspr, .spr" style="display: none;" (change)="onSpriteChange($event)" />
                     </label>
                     <label>{{spriteFilename}}</label>
                     <label class="text-danger">{{spriteError}}</label><br>

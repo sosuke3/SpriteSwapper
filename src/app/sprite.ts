@@ -325,10 +325,11 @@ export class Sprite
         this.redPalette = new Palette(this.paletteData.subarray(index, index + 30));
         index += 30;
         this.bunnyPalette = new Palette(this.paletteData.subarray(index, index + 30));
+        index += 30;
 
         if (this.paletteData.length === 0x7C)
         {
-            this.GlovePalette = this.paletteData.subarray(0x7078, 0x7078 + 4);
+            this.GlovePalette = this.paletteData.subarray(index, index + 4);
         }
 
         this.fillPreviewBytes();
